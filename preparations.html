@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>制造链路 · 药品图鉴 | 化境 ChemLab</title>
+<meta name="description" content="279 条常见化学品与试剂的实验室制法，以点阵制造链路展示物品、工序与产物，含风险、用途与完整工单，并可跳转合成工坊编排多步路线。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230e9f8e' d='M9 2h6v5l4.5 11A2 2 0 0 1 17.6 21H6.4a2 2 0 0 1-1.9-3L9 7V2z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/chain.css">
+</head>
+<body class="chain-page">
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="化境 ChemLab 首页">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4.5 11A2 2 0 0 1 17.6 22H6.4a2 2 0 0 1-1.9-3L9 8Z"/><path d="M7 15h10"/></svg>
+      </span>
+      <span>化境 ChemLab<small>Preparation &amp; Experiment</small></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="index.html">首页</a>
+      <a href="preparations.html" aria-current="page">药品制法</a>
+      <a href="forge.html">合成工坊</a>
+      <a href="experiments.html">化学实验</a>
+      <a href="propellants.html">固体推进剂</a>
+      <a href="cleaners.html">清洁剂成分</a>
+      <a href="safety.html">安全须知</a>
+    </nav>
+
+    <button class="icon-btn nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="chain-app">
+  <!-- 顶部深色检索条：文件夹 / 面包屑 / 搜索 / 返回 -->
+  <div class="chain-bar">
+    <button class="chain-folder" id="chain-folder" type="button" aria-label="打开药品图鉴" title="打开药品图鉴">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+    </button>
+    <nav class="chain-crumb" aria-label="面包屑">
+      <a href="index.html">化境百科</a><i>›</i>
+      <a href="preparations.html">物品图鉴</a><i>›</i>
+      <b id="crumb-name">制造链路</b>
+    </nav>
+    <label class="chain-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="prep-search" type="search" placeholder="检索药品 / 制法 / 原料" autocomplete="off" aria-label="搜索药品" role="combobox" aria-expanded="false" aria-controls="chain-suggest">
+      <span class="search-key" aria-hidden="true">/</span>
+    </label>
+    <a class="chain-back" href="index.html" aria-label="返回首页">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H4"/><path d="m10 6-6 6 6 6"/></svg>
+    </a>
+  </div>
+  <div class="chain-suggest" id="chain-suggest" role="listbox" aria-label="检索结果" hidden></div>
+
+  <!-- 分类条：八个大类一目了然；盐类可切换为离子检索表 -->
+  <div class="chain-cats-row">
+    <div class="chain-cats" id="prep-cats" role="group" aria-label="药品分类"></div>
+    <button class="salt-toggle" id="salt-toggle" type="button" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/><path d="M8 3v18M16 3v18"/></svg>
+      盐类检索表
+    </button>
+  </div>
+
+  <section class="salt-view" id="salt-view" aria-label="盐类离子检索表" hidden>
+    <div class="salt-head">
+      <div>
+        <span class="salt-kicker">SALT INDEX / 离子交叉表</span>
+        <h2>盐类检索表</h2>
+        <p>左列为阳离子，顶行为阴离子；单元格显示化学式，同一格有多种制法时显示条数，点击即可查看具体做法。</p>
+      </div>
+      <div class="salt-legend">
+        <span><i class="dot dot-cat"></i>阳离子</span>
+        <span><i class="dot dot-an"></i>阴离子</span>
+        <span>共 <b id="salt-count">0</b> 种盐 · 表内 <b id="salt-main-count">0</b> 种</span>
+        <span>少量离子盐类 <b id="salt-rare-count">0</b> 种</span>
+      </div>
+    </div>
+    <div class="salt-layout">
+      <div class="salt-main">
+        <div class="salt-scroll">
+          <table class="salt-table" id="salt-table"></table>
+        </div>
+        <div class="salt-rare" id="salt-rare" hidden>
+          <div class="salt-rare-head">
+            <h3>少量离子盐类</h3>
+            <p>这些离子在本站对应的盐很少，不再单独占一行或一列；点击名称同样可以查看制法。</p>
+          </div>
+          <div class="salt-rare-list" id="salt-rare-list"></div>
+        </div>
+      </div>
+      <aside class="salt-result" id="salt-result" aria-live="polite">
+        <p class="salt-hint">点击表格里的盐：只有一条制法时直接打开流程图；同一格有多条时，这里会列出可选的制法。</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="chain-stage" id="chain-stage" aria-label="制造链路画布">
+    <div class="chain-viewport" id="chain-viewport">
+      <div class="chain-canvas" id="chain-canvas">
+        <svg class="chain-edges" id="chain-edges" aria-hidden="true"></svg>
+      </div>
+      <div class="chain-empty" id="chain-empty">
+        <p>检索或打开「药品图鉴」，选择一种药品查看它的制造链路。</p>
+        <button class="btn btn-ghost" id="chain-open" type="button">打开药品图鉴</button>
+      </div>
+    </div>
+
+    <div class="chain-hud">
+      <div class="chain-zoom">
+        <span>显示比例: <b id="zoom-val">75%</b></span>
+        <input id="zoom-range" type="range" min="40" max="100" step="5" value="75" aria-label="缩放制造链路">
+      </div>
+      <span class="chain-hint">双指进行缩放 · 滚轮 / 滑杆调整比例 · 点击图块查看工单</span>
+      <span class="chain-uid">UID: 279-ROUTES</span>
+    </div>
+
+    <div class="chain-info">
+      <div class="chain-info-head">
+        <div>
+          <span class="chain-kicker" id="chain-kicker">PRODUCTION CHAIN</span>
+          <h1 id="chain-title">制造链路</h1>
+          <p id="chain-sub">从图鉴中选择一种药品，这里会显示它的原料、工序与产物。</p>
+        </div>
+        <div class="chain-meta" id="chain-meta"></div>
+      </div>
+
+      <div class="chain-roles" id="chain-roles" aria-label="原料用途"></div>
+
+      <ol class="chain-steps" id="chain-steps"></ol>
+
+      <p class="chain-forge"><a href="forge.html">需要多步合成？打开合成工坊，拖入一种药品自动展开全套原料 →</a></p>
+
+      <p class="chain-warn">
+        教学示意：链路只表示投料顺序与操作阶段，不代表工业装置。标为高危的条目（氯气、硫化氢、铝热反应等）具有剧毒、爆炸或强腐蚀风险，仅用于认知，严禁在非专业场所尝试。
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- 图鉴抽屉 -->
+<aside class="chain-drawer" id="chain-drawer" aria-label="药品图鉴" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>药品图鉴 <span id="drawer-count">279</span></h2>
+    <button class="drawer-close" id="drawer-close" type="button" aria-label="关闭图鉴">×</button>
+  </div>
+  <div class="drawer-hz" id="drawer-hz" role="group" aria-label="按风险筛选"></div>
+  <div class="drawer-list" id="prep-list" role="listbox" aria-label="药品列表"></div>
+</aside>
+<div class="chain-scrim" id="chain-scrim" hidden></div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> 化境 ChemLab · 教学演示站点</span>
+      <span>物品 · 工序 · 产物 · 风险</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data-preparations.js"></script>
+<script src="assets/data-experiments.js"></script>
+<script src="assets/add-content.js"></script>
+<script src="assets/art.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/chain.js"></script>
+</body>
+</html>

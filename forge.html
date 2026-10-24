@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>合成工坊 · 多步制法编排 | 化境 ChemLab</title>
+<meta name="description" content="拖入任意药品，自动展开它的全套原料与制法依赖，标出缺失药品、切换替代制法，并检查多步合成路线与风险。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M12 4h8v9l6 11a4 4 0 0 1-3.5 6h-13A4 4 0 0 1 6 24l6-11z' fill='%230e9f8e'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("chemlab-theme");
+      var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = theme;
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/forge.css">
+</head>
+<body class="forge-page">
+<a class="skip-link" href="#forge-main">跳到主内容</a>
+
+<header class="nav" id="nav">
+  <div class="nav-inner wrap">
+    <a class="brand" href="index.html" aria-label="化境 ChemLab 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="none">
+          <path d="M15 6h10v11l7 13a4 4 0 0 1-3.5 6h-17A4 4 0 0 1 8 30l7-13Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M13 27h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="17" cy="22" r="1.6" fill="currentColor"/><circle cx="22.5" cy="24.5" r="1.2" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-text"><b>化境</b><small>ChemLab</small></span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="index.html">首页</a>
+      <a href="preparations.html">药品制法</a>
+      <a href="forge.html" aria-current="page">合成工坊</a>
+      <a href="experiments.html">化学实验</a>
+      <a href="propellants.html">固体推进剂</a>
+      <a href="cleaners.html">清洁剂成分</a>
+      <a href="safety.html">安全须知</a>
+    </nav>
+    <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-label="切换深浅色主题" title="切换主题">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>
+      </svg>
+    </button>
+    <button class="icon-btn nav-toggle" id="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap forge-main" id="forge-main">
+  <section class="forge-head">
+    <div>
+      <p class="eyebrow">Synthesis Workbench</p>
+      <h1>合成工坊 · 自动配方树</h1>
+      <p class="forge-lead">从左侧拖入任意一种药品，工坊会自动沿它的原料表逐级展开：能由站内制法生产的原料继续展开，直到落到<b>基础原料</b>或<b>已收录的制法</b>为止。每个节点都能查看制法、标记「没有」并自动换用替代制法；基础原料可以点「补足药品」记录你实际拿到的试剂。循环依赖会复用同一节点，不会无限套娃。也可以关闭自动展开，手动连线编排。</p>
+    </div>
+    <div class="forge-actions">
+      <button class="btn btn-ghost" type="button" id="forge-example">载入示例配方树</button>
+      <button class="btn btn-ghost" type="button" id="forge-clear">清空画布</button>
+      <button class="btn btn-primary" type="button" id="forge-export">导出路线</button>
+    </div>
+  </section>
+
+  <div class="forge-layout">
+    <aside class="forge-palette" aria-label="制法卡片库">
+      <div class="palette-head">
+        <h2>制法卡片</h2>
+        <span id="forge-count" class="palette-count">279 张</span>
+      </div>
+      <label class="palette-search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+        <input id="forge-search" type="search" placeholder="搜索名称、化学式、类别…" autocomplete="off">
+      </label>
+      <div class="chips palette-chips" id="forge-cats" role="group" aria-label="按类别筛选"></div>
+      <div class="palette-list" id="forge-list"></div>
+      <p class="palette-tip">拖入画布或点击 <b>＋</b>：自动展开模式下会以该药品为目标重建配方树。</p>
+    </aside>
+
+    <section class="forge-stage" aria-label="编排画布">
+      <div class="stage-bar">
+        <span id="forge-status" class="stage-status">节点 0 · 连线 0 · 尚未成链</span>
+        <span class="stage-hint" id="forge-mode-hint">自动展开 · 最多 5 层 · 空白处拖动平移 · 拖动卡片移动 · × 删除</span>
+      </div>
+      <div class="board-scroll">
+        <div class="forge-board" id="forge-board">
+          <svg class="forge-edges" id="forge-edges" width="1640" height="960" aria-hidden="true"></svg>
+          <div class="forge-nodes" id="forge-nodes"></div>
+          <div class="board-empty" id="forge-empty">
+            <svg viewBox="0 0 120 80" width="120" height="80" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="8" y="16" width="44" height="22" rx="4"/><rect x="68" y="42" width="44" height="22" rx="4"/>
+              <path d="M52 27h16v26h-0" stroke-dasharray="4 4"/><path d="m64 50 4 4 4-4"/>
+            </svg>
+            <p>把左侧的药品卡片拖到这里</p>
+            <p class="board-empty-sub">工坊会自动补齐它的全套原料与前置制法</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="deps-panel" id="forge-deps-panel">
+        <div class="deps-head">
+          <h2>依赖清单</h2>
+          <span id="forge-dep-count" class="deps-count">0 项</span>
+        </div>
+        <div class="deps-tools">
+          <label class="switch">
+            <input id="forge-auto" type="checkbox" checked>
+            <span>拖入自动展开配方树</span>
+          </label>
+          <button class="btn btn-ghost btn-small" type="button" id="forge-reflow">重排图层</button>
+        </div>
+        <div class="deps-list" id="forge-deps-list">
+          <p class="deps-idle">还没有依赖。拖一个药品进来，这里会列出每一层原料、缺少的药品和可替换的制法。</p>
+        </div>
+        <p class="deps-note">「基础原料」表示站内没有它的制法，需要自备；点路线里的「补足药品」可以记录实际补入的试剂，随路线保存与导出。标记「缺失」后若有替代制法会自动切换，没有替代制法时会保留缺失标记。循环依赖复用同一节点，避免无限展开。</p>
+      </div>
+
+      <div class="route-panel" id="forge-route-panel">
+        <div class="route-head">
+          <h2>路线解读</h2>
+          <span id="forge-risk" class="route-risk">风险 —</span>
+        </div>
+        <ol class="route-list" id="forge-route-list">
+          <li class="route-idle">还没有节点，先拖一张制法卡片进来。</li>
+        </ol>
+        <p class="route-note" id="forge-route-note"></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="forge-guide">
+    <h2>怎么读一张配方树</h2>
+    <div class="guide-grid">
+      <article><b>① 自动展开</b><p>从目标药品的原料表出发，逐级寻找站内制法；展开到没有制法的基础原料，或复用到已经出现的节点时停止。</p></article>
+      <article><b>② 标记与换源</b><p>依赖清单里每个节点都有「制法 / 换源 / 缺失」：缺源可自动切换另一种制法；标了「缺失」的药品在图上与清单里都会变红。</p></article>
+      <article><b>③ 不套娃</b><p>同一种药品只保留一个节点，循环依赖用复用连线表示；展开深度上限 5 层，避免无限递归。</p></article>
+      <article><b>④ 风险与导出</b><p>风险取整棵树里最高等级。导出的文本会按投料顺序列出每一步、补入的原料（含「补足药品」记录）和基础原料清单。</p></article>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p>化境 ChemLab · 教学用化学制备与实验资料库</p>
+    <p>内容仅用于课程学习与科普，不构成任何操作指导。<span data-year>2026</span></p>
+  </div>
+</footer>
+
+<script src="assets/data-preparations.js"></script>
+<script src="assets/data-experiments.js"></script>
+<script src="assets/add-content.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/art.js"></script>
+<script src="assets/forge.js"></script>
+</body>
+</html>

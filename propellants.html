@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>固体推进剂 · 化境 ChemLab</title>
+<meta name="description" content="固体推进剂科普：双基、复合与糖类推进剂的分类、原理、航天应用、法规与安全边界。本站不提供配方、配比、工艺、点火或测试方法。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230e9f8e' d='M9 2h6v5l4.5 11A2 2 0 0 1 17.6 21H6.4a2 2 0 0 1-1.9-3L9 7V2z'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("chemlab-theme");
+      if (!t) t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="化境 ChemLab 首页">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4.5 11A2 2 0 0 1 17.6 22H6.4a2 2 0 0 1-1.9-3L9 8Z"/><path d="M7 15h10"/></svg>
+      </span>
+      <span>化境 ChemLab<small>Preparation &amp; Experiment</small></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="index.html">首页</a>
+      <a href="preparations.html">药品制法</a>
+      <a href="forge.html">合成工坊</a>
+      <a href="experiments.html">化学实验</a>
+      <a href="propellants.html" aria-current="page">固体推进剂</a>
+      <a href="cleaners.html">清洁剂成分</a>
+      <a href="safety.html">安全须知</a>
+    </nav>
+
+    <button class="icon-btn theme-toggle" type="button" aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+
+    <button class="icon-btn nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="index.html">首页</a>
+        <span>/</span>
+        <span>固体推进剂</span>
+      </nav>
+      <h1>固体推进剂</h1>
+      <p>
+        从探空火箭到航天飞机固体助推器，固体推进剂把化学能变成推力。这一页只讲<strong>它是什么、分几类、为什么危险、受什么管理</strong>，
+        不提供任何配方、配比、原料清单、混合、浇注、固化、点火或测试方法。
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-bottom: 80px;">
+    <div class="wrap">
+      <div class="prose">
+
+        <div class="callout callout-warn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <div class="callout-text">
+            <strong>这一页刻意“留白”。</strong>
+            硝糖、APCP 等名称在这里只作为分类讨论。任何个人在非专业场所配制、混合、浇注、储存、点燃固体推进剂，都可能造成不可逆的烧伤、爆炸和火灾，
+            并在中国及多数国家构成违法。需要含能材料知识时，请通过高校课程、正式教材和具备资质的单位学习。
+          </div>
+        </div>
+
+        <h2>一、固体推进剂是什么</h2>
+        <p>
+          固体推进剂是一种<strong>自身同时含有氧化剂和可燃物</strong>的含能材料。它燃烧时不需要外界空气，产生的气体在燃烧室内建立压强，经喷管加速排出，按牛顿第三定律产生推力。
+          这使固体发动机结构简单、可以长期贮存、随时点火，成为导弹、探空火箭、固体助推器和逃逸塔的常见动力。
+        </p>
+        <p>
+          它和炸药的区别在于<strong>能量释放方式</strong>：推进剂追求受控、稳定的燃烧（燃速通常以 mm/s 计），炸药追求爆轰（爆速以 km/s 计）。
+          但两者同属含能材料，在感度、储存、运输和法规上受到同样严格的管理——“推进剂”不等于“安全燃料”。
+        </p>
+
+        <h2>二、主要类别</h2>
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr><th>类别</th><th>结构</th><th>典型组成（仅列组分角色）</th><th>典型应用</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>双基推进剂</td>
+                <td>均质</td>
+                <td>硝化棉 + 硝化甘油，增塑剂与稳定剂</td>
+                <td>战术导弹、迫击炮增程、小型火箭</td>
+              </tr>
+              <tr>
+                <td>复合推进剂</td>
+                <td>非均质</td>
+                <td>高氯酸铵等氧化剂 + 端羟基聚丁二烯等黏合剂/燃料 + 铝粉 + 燃速调节剂</td>
+                <td>航天固体助推器、战略与战术导弹、逃逸塔</td>
+              </tr>
+              <tr>
+                <td>硝酸铵/硝酸钾基</td>
+                <td>非均质</td>
+                <td>硝酸盐氧化剂 + 糖类或聚合物燃料</td>
+                <td>模型火箭、历史探空火箭；感度与稳定性差，业余配方不可靠</td>
+              </tr>
+              <tr>
+                <td>其他新型体系</td>
+                <td>—</td>
+                <td>含能黏合剂、高能氧化剂、叠氮类等</td>
+                <td>实验室与工程研究，不对个人开放</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          常被短视频提到的“硝糖”属于硝酸盐 + 糖类的非均质混合物，“AP”指高氯酸铵，“APCP”是以高氯酸铵为氧化剂的复合推进剂。
+          它们的共同点是：<strong>氧化剂与燃料靠得很近，一旦局部受热或受摩擦，燃烧可以极快扩展到整体</strong>；密闭时会从燃烧转为爆燃。
+        </p>
+
+        <h2>三、为什么本站不写配方</h2>
+        <ul>
+          <li><strong>感度不可控</strong>：混合均匀度、颗粒度、湿度、静电、金属工具都会改变摩擦与冲击感度。同一个“配方”在不同人手里可能是两种东西。</li>
+          <li><strong>“温和”不等于安全</strong>：糖、小苏打、面粉这类词容易让人放松警惕，但只要体系里同时有氧化剂与可燃物、又被装进壳体，就应当按含能材料对待。本站不提供任何此类配方，也不提供“降低感度”的改良建议。</li>
+          <li><strong>燃烧不可控</strong>：固体推进剂一旦点燃，通常无法关机或调节推力；药柱裂纹、气孔、脱粘会让燃烧面积骤增，导致壳体超压。</li>
+          <li><strong>产物有毒</strong>：含氯氧化剂会产生氯化氢，硝酸盐体系会产生氮氧化物，不完全燃烧会产生一氧化碳；在室内点燃足以造成急性中毒。</li>
+          <li><strong>法律风险</strong>：在中国，非法制造、买卖、储存、运输爆炸物与危险物质可能触犯《刑法》《民用爆炸物品安全管理条例》《危险化学品安全管理条例》等；高氯酸盐、硝酸盐等氧化剂也受到购买与使用管理。</li>
+          <li><strong>环境代价</strong>：高氯酸盐易溶于水、难降解，会污染地下水；专业工厂必须有废水与废气处理。</li>
+        </ul>
+
+        <h2>四、从历史到航天</h2>
+        <p>
+          固体推进剂的历史几乎和火箭史一样长：中国古代的黑火药是最早的固体推进剂；20 世纪 30—40 年代，双基推进剂让固体火箭进入实用化；
+          1950 年代以后，高氯酸铵/聚丁二烯复合推进剂把比冲和力学性能推上新的台阶。
+        </p>
+        <p>
+          今天，固体发动机最醒目的应用是<strong>大型固体助推器</strong>：航天飞机与 SLS 的两枚五段式助推器、阿里安 5/6 的 EAP、欧洲织女星、日本 H-IIA 的 SRB-A，
+          以及载人飞船的逃逸塔。它们的共同需求是“多年贮存、几秒内满推力、结构简单”，这正是固体的长处；比冲低于液体、关机困难则是它的代价。
+        </p>
+        <p>
+          中国在长征系列运载火箭的固体助推、快舟与捷龙系列固体运载火箭上也使用了固体发动机。相关设计、配方与工艺属于工程与工业体系，不是公开实验项目。
+        </p>
+
+        <h2>五、如果感兴趣，正确的学习路径</h2>
+        <ul>
+          <li><strong>课程</strong>：物理化学、燃烧学、化工安全、固体火箭发动机原理、含能材料基础。</li>
+          <li><strong>教材与文献</strong>：高校《固体火箭发动机原理》教材、NASA 与 AIAA 的推进技术公开资料；优先读“原理与安全”，不要从配方入手。</li>
+          <li><strong>安全替代</strong>：水火箭、压缩空气火箭、商用模型火箭发动机（按厂家说明在开阔场地使用）、推力矢量演示套件。这些能讲清喷管、质心、推重比，而不触碰含能材料。</li>
+          <li><strong>职业路径</strong>：航天院所、推进剂生产与检测单位、含能材料安全评估机构——都需要严格的资质与培训。</li>
+        </ul>
+
+        <h2>六、想动手：先做这些安全替代</h2>
+        <p>
+          “有没有安全的固体推进剂配方？”——没有。任何把氧化剂与燃料混在一起、再装进密闭壳体的自制体系，都不再属于可以按教程复现的实验。
+          本站不会提供硝糖、APCP 或任何“温和固推”的原料清单、比例、混料、装药、固化、点火与测试步骤。
+        </p>
+        <p>要理解推力、反冲与气体膨胀，可以改用下面这些不含含能材料的实验，站内都有完整步骤与风险提示：</p>
+        <ul>
+          <li><a href="experiments.html#e/water-rocket">水火箭</a>：压缩空气把水喷出，讲反冲与动量守恒。</li>
+          <li><a href="experiments.html#e/balloon-rocket">气球反冲车</a>：最便宜的反冲演示。</li>
+          <li><a href="experiments.html#e/baking-soda-rocket">小苏打白醋压力实验</a>：气体膨胀对外做功。</li>
+          <li><a href="experiments.html#e/effervescent-rocket">泡腾片压力小实验</a>：同样的气体膨胀，材料更简单。</li>
+        </ul>
+        <p>
+          这些实验的“推力”来自压缩空气、水或二氧化碳，不涉及燃烧与含能材料；也请不要把它们改装成硬质密闭容器或随意加大用量。
+        </p>
+
+        <h2>七、常见说法辨伪</h2>
+        <div class="table-scroll">
+          <table class="data">
+            <thead><tr><th>说法</th><th>事实</th></tr></thead>
+            <tbody>
+              <tr><td>“硝糖是安全燃料，厨房就能做”</td><td>不实。它对热、摩擦、静电敏感，密闭会爆燃，燃烧温度足以引燃周围可燃物。</td></tr>
+              <tr><td>“AP 就是普通化肥，随便买”</td><td>错误。高氯酸铵是强氧化剂，属于受管制的危险化学品，个人大量购买与储存涉嫌违法。</td></tr>
+              <tr><td>“按网上配方称量就行”</td><td>配方通常省略粒度、纯度、固化、缺陷检测与安全距离，这些恰恰决定事故是否发生。</td></tr>
+              <tr><td>“固体推进剂就是炸药”</td><td>能量释放方式不同，但同属含能材料，按同样严格的要求管理；不要用“不是炸药”来降低警惕。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>八、遇到危险时</h2>
+        <ul>
+          <li>发现可疑的自制含能材料、不明粉末或改装容器：<strong>不要触碰、移动、加热或尝试拆解</strong>，远离并立即报警。</li>
+          <li>烧伤：立即用流动的凉水冲洗 20 分钟，不要涂抹牙膏、酱油；面积较大或起水疱时尽快就医。</li>
+          <li>吸入烟雾：迅速转移到通风处，保持安静，出现呼吸困难立即就医。</li>
+          <li>火灾：不要用水扑救金属粉末或氧化剂火灾；撤离并呼叫专业消防，说明可能涉及氧化剂。</li>
+        </ul>
+
+        <div class="callout callout-ok">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          <div class="callout-text">
+            <strong>把好奇心用在正确的地方。</strong>
+            你可以用本站的链路视图理解“氧化剂—燃料—产物”的关系，用合成工坊练习多步路线设计，用实验页做安全的课堂演示；
+            但含能材料的配方与工艺，不属于自学者可以“试出来”的领域。先读<a href="safety.html">安全须知</a>，再决定你的下一步。
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>化境 ChemLab</h5>
+        <p>一份写给学生的化学制法与实验手册。内容以基础化学教材与常规实验讲义为依据整理，重在讲清原理与风险，不追求“炫技”。</p>
+      </div>
+      <div>
+        <h5>目录</h5>
+        <ul>
+          <li><a href="preparations.html">药品制法</a></li>
+          <li><a href="experiments.html">化学实验</a></li>
+          <li><a href="propellants.html">固体推进剂</a></li>
+          <li><a href="cleaners.html">清洁剂成分</a></li>
+          <li><a href="safety.html">安全须知</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>提示</h5>
+        <p>本站内容仅用于教学与科普，不构成任何操作指导。实验须在具备资质的场所、由专业人员指导完成。</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> 化境 ChemLab · 教学演示站点</span>
+      <span>原理 · 步骤 · 现象 · 风险</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

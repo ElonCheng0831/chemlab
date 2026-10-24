@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>安全须知 · 化境 ChemLab</title>
+<meta name="description" content="化学实验室安全守则：个人防护、危险等级说明、常见事故应急处理、废液分类与法律边界。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230e9f8e' d='M9 2h6v5l4.5 11A2 2 0 0 1 17.6 21H6.4a2 2 0 0 1-1.9-3L9 7V2z'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("chemlab-theme");
+      if (!t) t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="化境 ChemLab 首页">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4.5 11A2 2 0 0 1 17.6 22H6.4a2 2 0 0 1-1.9-3L9 8Z"/><path d="M7 15h10"/></svg>
+      </span>
+      <span>化境 ChemLab<small>Preparation &amp; Experiment</small></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="index.html">首页</a>
+      <a href="preparations.html">药品制法</a>
+      <a href="forge.html">合成工坊</a>
+      <a href="experiments.html">化学实验</a>
+      <a href="propellants.html">固体推进剂</a>
+      <a href="cleaners.html">清洁剂成分</a>
+      <a href="safety.html" aria-current="page">安全须知</a>
+    </nav>
+
+    <button class="icon-btn theme-toggle" type="button" aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+
+    <button class="icon-btn nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="nav-links">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="index.html">首页</a>
+        <span>/</span>
+        <span>安全须知</span>
+      </nav>
+      <h1>安全须知</h1>
+      <p>
+        化学实验的风险来自四个地方：不了解物质、不清楚反应、不遵守操作、不处理废物。
+        这一页把四件事都讲清楚——它不是免责声明，而是实验能够开始的前提。
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-bottom: 80px;">
+    <div class="wrap">
+      <div class="prose">
+
+        <h2>一、先看这条底线</h2>
+        <div class="callout callout-warn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <div class="callout-text">
+            <strong>本站不是操作指南，而是教学资料。</strong>
+            所有内容仅供理解化学原理与安全知识。任何实验都应在学校或机构的正规实验室、由具备资质的教师指导下完成。
+            严禁在家中、宿舍、楼道、野外等非专业场所进行化学实验；严禁制备、储存、使用毒品、爆炸物、剧毒物质或法律禁止的其他物质。
+          </div>
+        </div>
+
+        <h2>二、风险分级怎么看</h2>
+        <p>本站给每个制法与实验标注了三级风险，判断依据是：是否需要通风橱、是否产生剧毒或易爆物质、是否涉及高温熔融或强放热。</p>
+
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr><th>等级</th><th>含义</th><th>典型例子</th><th>必要条件</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hz hz-1">低危</span></td>
+                <td>规范操作下风险较低，可用于课堂分组实验。</td>
+                <td>二氧化碳制取、焰色试验、萃取分液</td>
+                <td>护目镜、实验服、基本通风</td>
+              </tr>
+              <tr>
+                <td><span class="hz hz-2">中危</span></td>
+                <td>涉及腐蚀性、易燃或刺激性物质，需教师在场指导。</td>
+                <td>乙酸乙酯制备、蒸馏、电镀、过氧化氢实验</td>
+                <td>通风橱、手套、护目镜、灭火器</td>
+              </tr>
+              <tr>
+                <td><span class="hz hz-3">高危</span></td>
+                <td>剧毒、易爆、强放热或产生高温熔融物，仅限专业人员演示。</td>
+                <td>氯气制备、铝热反应、钠与水、银氨溶液</td>
+                <td>通风橱、防毒面具、警戒距离、应急预案</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>三、十条实验守则</h2>
+        <div class="rule-grid">
+          <div class="rule"><span class="n">RULE 01</span><h4>先读 SDS，再碰试剂</h4><p>任何药品在使用前都应知道它的危害性、急救措施与储存要求。</p></div>
+          <div class="rule"><span class="n">RULE 02</span><h4>护目镜全程佩戴</h4><p>眼睛没有替代品。即使只是“倒一下水”，也不要摘。</p></div>
+          <div class="rule"><span class="n">RULE 03</span><h4>不尝、不闻、不直接接触</h4><p>闻气味要用手扇动少量气体，绝不能把脸凑到瓶口。</p></div>
+          <div class="rule"><span class="n">RULE 04</span><h4>禁止独自做高危实验</h4><p>高危操作必须两人以上在场，且有一人熟悉应急流程。</p></div>
+          <div class="rule"><span class="n">RULE 05</span><h4>加料顺序不能凭感觉</h4><p>浓硫酸稀释时酸入水；酯化时先乙醇后硫酸；顺序错了会喷溅。</p></div>
+          <div class="rule"><span class="n">RULE 06</span><h4>加热要留退路</h4><p>试管口不对人，先预热后集中加热，受热容器不能密闭。</p></div>
+          <div class="rule"><span class="n">RULE 07</span><h4>可燃气体必须验纯</h4><p>氢气、甲烷等与空气混合达爆炸极限，遇火即爆。</p></div>
+          <div class="rule"><span class="n">RULE 08</span><h4>尾气与废液不能直排</h4><p>氯气、二氧化硫、硫化氢等必须用吸收液处理。</p></div>
+          <div class="rule"><span class="n">RULE 09</span><h4>危险废物分类收集</h4><p>含重金属、含卤代烃、强酸强碱、含银废液分别回收。</p></div>
+          <div class="rule"><span class="n">RULE 10</span><h4>离开前检查三件事</h4><p>水电关闭、火源熄灭、试剂归位并密封。</p></div>
+        </div>
+
+        <h2>四、常见事故的应急处理</h2>
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr><th>情形</th><th>正确处理</th><th>绝对不要做</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>酸溅到皮肤</td>
+                <td>立即用大量流动清水冲洗 15 分钟以上，再涂碳酸氢钠溶液。</td>
+                <td>不要先找中和剂再冲洗，也不要用力擦拭。</td>
+              </tr>
+              <tr>
+                <td>碱溅到皮肤</td>
+                <td>大量清水冲洗，再用 1% 硼酸溶液处理。</td>
+                <td>不要用浓酸去“中和”。</td>
+              </tr>
+              <tr>
+                <td>试剂入眼</td>
+                <td>立刻用洗眼器从内眼角向外冲洗至少 15 分钟，同时就医。</td>
+                <td>不要揉眼，不要用毛巾擦。</td>
+              </tr>
+              <tr>
+                <td>吸入刺激性气体</td>
+                <td>迅速转移到通风处，保持呼吸道通畅，严重时立即送医。</td>
+                <td>不要继续留在现场“观察一下”。</td>
+              </tr>
+              <tr>
+                <td>少量有机溶剂着火</td>
+                <td>用湿布、沙土或二氧化碳灭火器扑灭，切断电源与气源。</td>
+                <td>不要用水浇有机溶剂火。</td>
+              </tr>
+              <tr>
+                <td>金属钠着火</td>
+                <td>用干燥沙土覆盖隔绝空气。</td>
+                <td>绝不能用水、泡沫或二氧化碳灭火器。</td>
+              </tr>
+              <tr>
+                <td>汞洒落</td>
+                <td>撒硫粉使其转化为硫化汞，收集后按危废处理，开窗通风。</td>
+                <td>不要用吸尘器吸，不要用手直接接触。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>五、废液怎么处理</h2>
+        <p>实验室废液不是“倒掉就完事”。至少应做到分类收集、明确标签、交由有资质的单位处置：</p>
+        <ul>
+          <li><strong>含重金属废液</strong>（铜、银、铅、铬等）：单独收集，加碱沉淀后回收污泥，不得排入下水道。</li>
+          <li><strong>含卤代烃废液</strong>（四氯化碳、二氯甲烷等）：单独收集，这类物质难降解且有致癌性。</li>
+          <li><strong>强酸强碱废液</strong>：中和至 pH 6–8 后方可排放，中和过程会放热，需缓慢加入并搅拌。</li>
+          <li><strong>含银废液</strong>：加盐酸或氯化钠沉淀氯化银回收，严禁久置（银氨溶液会生成雷爆银）。</li>
+          <li><strong>有机溶剂</strong>：回收蒸馏或交由危废处理，不得倒入水槽。</li>
+        </ul>
+
+        <h2>六、那些被低估的危险</h2>
+        <h3>银氨溶液与雷爆银</h3>
+        <p>银氨溶液久置或蒸干会析出雷爆银（Ag₃N），轻微的摩擦、震动或受热都可能引发爆炸。因此必须现配现用，实验后立即加盐酸酸化处理，残液不得留到第二天。</p>
+
+        <h3>高氯酸与有机物</h3>
+        <p>高氯酸与有机物、还原剂接触可能生成爆炸性混合物，通风橱内使用高氯酸后要彻底清洗台面，避免残留物干涸。</p>
+
+        <h3>铝粉与粉尘爆炸</h3>
+        <p>铝粉、镁粉等金属粉尘在空气中达到一定浓度时遇火源会爆炸。取用时要轻、要慢，远离明火，剩余粉尘不能随意吹散。</p>
+
+        <h3>密闭容器加热</h3>
+        <p>任何密闭容器受热都会因内部压强升高而炸裂。加热试管时管口不能对着人，也不能对着自己。</p>
+
+        <h3>“生活用品能制浓硫酸”之类的网传配方</h3>
+        <p>这类说法在化学上不成立：浓硫酸必须含有硫元素，而双氧水受热只会分解成水和氧气，糖果、饮料主要成分是糖、色素和水，整个体系里没有硫源，也不可能凭空生成硫酸。红色通渠剂本身可能就是浓硫酸，加双氧水只会把其中的染料或指示剂氧化、让颜色褪去，这是“它本来就是强酸”的旁证，不是制酸步骤；向浓硫酸里加双氧水会放热并可能生成过氧硫酸，同样极其危险。工业上制硫酸要走“硫或硫化物 → 二氧化硫 → 催化氧化 → 三氧化硫 → 浓硫酸吸收”的路线，需要高温、催化剂、耐腐蚀设备与尾气处理，家庭条件完全不具备。</p>
+        <p>更危险的是，网传做法常常伴随加热、密闭、混合不明粉末等操作，真正可能发生的是烫伤、容器炸裂、有毒烟雾或火灾。凡是用“厨房材料 + 加热”就能得到强酸、强碱、爆炸物或“高纯试剂”的说法，基本都可以直接判定为假的；若拿不准，先查教材或问老师，不要拿自己的身体做验证。</p>
+
+        <h3>“自制固体推进剂”类教程</h3>
+        <p>糖类与硝酸盐、高氯酸盐与黏合剂、金属粉与氧化剂，这些组合确实属于含能材料，但它们的配方设计、混合、浇注、固化、药柱成型和点火都涉及静电、摩擦、热积累与意外点火，必须在具备资质的场所按规范进行。网络上把“厨房配方”包装成“科学实验”的教程，往往隐去了原料管制、粉尘爆炸、储存稳定性与法律责任等关键信息。本站 <a href="propellants.html">固体推进剂</a> 专区只讲分类、能量原理与应用，不提供任何配方或制作步骤。</p>
+
+        <h3>把两种清洁剂混在一起</h3>
+        <p>84 消毒液的有效成分是次氯酸钠，洁厕灵通常含盐酸。两者混用会发生 <code>NaClO + 2HCl → NaCl + Cl₂↑ + H₂O</code>，放出黄绿色、有刺激性的氯气；在卫生间等小空间里，短时间内就可能达到伤害浓度。含氯消毒剂与含氨清洁剂混用则会生成氯胺。管道疏通剂（氢氧化钠）遇水强烈放热，遇铝还会放出氢气。</p>
+        <p>“红色/黄色 KK 鲨鱼 = 浓硫酸/浓盐酸”“COD 去除剂 = 氯酸钠”“南科除垢剂 = 稀硝酸”这些对应并非空穴来风：KK 鲨鱼是通渠剂品牌，红色与黄色产品分别有浓硫酸、浓盐酸体系；工业 COD 去除剂常以氯酸钠为主成分；部分除垢剂确实含硝酸。但“成分对得上”不等于能家用——浓硫酸、浓盐酸、硝酸和氯酸钠都是危险化学品，腐蚀、挥发、氧化与放热风险远超普通清洁剂，不能拿来互相混合、加热或自行提纯。常见产品的成分、浓度与混用风险见 <a href="cleaners.html">清洁剂成分</a> 专页。</p>
+
+        <h2>七、法律与伦理边界</h2>
+        <p>化学知识本身是中性的，但行为有明确的法律边界。在我国，危险化学品的生产、经营、储存、使用受《危险化学品安全管理条例》等法规约束；易制毒化学品、易制爆化学品实行严格的购销与备案管理；制造、贩卖毒品，非法制造爆炸物，投放危险物质，都构成刑事犯罪。</p>
+        <p>因此本站：不提供任何受管制物质的合成路线，不提供武器化、提纯或规避监管的信息，不鼓励任何脱离正规实验室的操作。如果你对某个反应感兴趣，正确的路径是——查教材、读文献、在老师指导下走进实验室。</p>
+
+        <h2>八、给自学者的建议</h2>
+        <ul>
+          <li>先从<strong>无危险</strong>的内容入手：焰色试验的观察、纸上层析、结晶观察、酸碱指示剂变色。</li>
+          <li>用<strong>虚拟实验</strong>和视频替代动手：很多大学与科普机构提供免费仿真实验。</li>
+          <li>真想动手，去<strong>学校实验室、科技馆、创客空间</strong>，在有通风橱、洗眼器和灭火器的地方做。</li>
+          <li>买任何试剂前先问自己：我是否知道它的危害、急救方式和废液去向？有一个答不上来，就先别买。</li>
+        </ul>
+
+        <div class="callout callout-ok" style="margin-top: 40px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          <div class="callout-text">
+            把实验做成功，靠的是对细节的尊重；把实验做安全，靠的是对未知的敬畏。两者缺一不可。
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>化境 ChemLab</h5>
+        <p>一份写给学生的化学制法与实验手册。内容以基础化学教材与常规实验讲义为依据整理，重在讲清原理与风险。</p>
+      </div>
+      <div>
+        <h5>目录</h5>
+        <ul>
+          <li><a href="preparations.html">药品制法</a></li>
+          <li><a href="experiments.html">化学实验</a></li>
+          <li><a href="cleaners.html">清洁剂成分</a></li>
+          <li><a href="safety.html">安全须知</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>提示</h5>
+        <p>本站内容仅用于教学与科普，不构成任何操作指导。实验须在具备资质的场所、由专业人员指导完成。</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> 化境 ChemLab · 教学演示站点</span>
+      <span>原理 · 步骤 · 现象 · 风险</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data-preparations.js"></script>
+<script src="assets/data-experiments.js"></script>
+<script src="assets/add-content.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
