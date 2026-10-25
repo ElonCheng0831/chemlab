@@ -18,6 +18,17 @@
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/forge.css">
   <script src="assets/analytics.js"></script>
+  <meta name="theme-color" content="#0e9f8e">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="https://eloncheng0831.github.io/chemlab/forge.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="化境 ChemLab">
+  <meta property="og:title" content="合成工坊 · 多步制法编排 | 化境 ChemLab">
+  <meta property="og:description" content="拖入任意药品，自动展开它的全套原料与制法依赖，标出缺失药品、切换替代制法，并检查多步合成路线与风险。">
+  <meta property="og:url" content="https://eloncheng0831.github.io/chemlab/forge.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="合成工坊 · 多步制法编排 | 化境 ChemLab">
+  <meta name="twitter:description" content="拖入任意药品，自动展开它的全套原料与制法依赖，标出缺失药品、切换替代制法，并检查多步合成路线与风险。">
 </head>
 <body class="forge-page">
 <a class="skip-link" href="#forge-main">跳到主内容</a>
@@ -72,7 +83,8 @@
     <aside class="forge-palette" aria-label="制法卡片库">
       <div class="palette-head">
         <h2>制法卡片</h2>
-        <span id="forge-count" class="palette-count">279 张</span>
+        <span id="forge-count" class="palette-count">300 张</span>
+        <button class="palette-toggle" type="button" id="forge-palette-toggle" aria-expanded="true" aria-controls="forge-list">收起</button>
       </div>
       <label class="palette-search">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
@@ -86,6 +98,12 @@
     <section class="forge-stage" aria-label="编排画布">
       <div class="stage-bar">
         <span id="forge-status" class="stage-status">节点 0 · 连线 0 · 尚未成链</span>
+        <div class="zoom-tools" role="group" aria-label="画布缩放">
+          <button type="button" id="forge-zoom-out" aria-label="缩小画布">−</button>
+          <button type="button" id="forge-zoom-val" class="zoom-val" aria-label="恢复 100% 比例" title="点一下恢复 100%">100%</button>
+          <button type="button" id="forge-zoom-in" aria-label="放大画布">＋</button>
+          <button type="button" id="forge-zoom-fit" aria-label="适应画布宽度">适应</button>
+        </div>
         <span class="stage-hint" id="forge-mode-hint">自动展开 · 最多 5 层 · 空白处拖动平移 · 拖动卡片移动 · × 删除</span>
       </div>
       <div class="board-scroll">
