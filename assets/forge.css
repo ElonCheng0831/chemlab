@@ -113,6 +113,9 @@
 .route-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); }
 .route-list li.route-idle, .route-list li.route-cycle { color: var(--muted); font-size: 12px; justify-content: flex-start; }
 .route-list li.route-cycle { color: var(--warn); border-color: var(--warn); background: var(--warn-soft); }
+.route-text { flex: 1 1 150px; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.route-text b { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.route-text small { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .route-step { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-family: var(--mono); font-size: 11px; }
 .route-text { display: flex; flex-direction: column; min-width: 0; }
 .route-text b { font-size: 12.5px; }
@@ -416,4 +419,82 @@ body.mode-auto .fg-node:hover { border-color: var(--accent); }
   .deps-list { max-height: 200px; }
   .dep-actions { flex-wrap: wrap; justify-content: flex-end; }
 }
+
+/* ==========================================================================
+   画布缩放 / 手机端操作优化
+   ========================================================================== */
+.stage-bar { position: sticky; top: 0; z-index: 7; }
+.zoom-tools { display: flex; align-items: center; gap: 4px; margin-left: auto; flex: none; }
+.zoom-tools button {
+  min-width: 34px; height: 32px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 7px;
+  background: var(--surface); color: var(--ink-2);
+  font: 600 13px/1 var(--sans); cursor: pointer;
+  touch-action: manipulation;
+}
+.zoom-tools button:hover { border-color: var(--accent); color: var(--accent); }
+.zoom-tools button:active { transform: translateY(1px); }
+.zoom-tools .zoom-val { min-width: 54px; font-family: var(--mono); font-size: 11px; color: var(--ink); }
+.board-scroll { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.forge-board { transform-origin: 0 0; }
+
+.palette-head { flex-wrap: wrap; }
+.palette-count { margin-left: auto; }
+.palette-toggle {
+  display: none; margin-left: 8px; padding: 4px 9px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--accent);
+  font: 600 11px/1.4 var(--sans); cursor: pointer;
+  touch-action: manipulation;
+}
+.forge-palette.is-collapsed .palette-search,
+.forge-palette.is-collapsed .palette-chips,
+.forge-palette.is-collapsed .palette-list,
+.forge-palette.is-collapsed .palette-tip { display: none; }
+.forge-palette.is-collapsed { padding-bottom: 10px; }
+
+@media (max-width: 900px) {
+  .palette-toggle { display: inline-flex; align-items: center; }
+  .stage-bar { flex-wrap: wrap; gap: 8px; }
+  .zoom-tools { order: 3; width: 100%; margin-left: 0; }
+  .zoom-tools button { flex: 1 1 0; height: 38px; }
+  .zoom-tools .zoom-val { flex: 1.3 1 0; }
+  .route-panel .btn, .deps-tools .btn { min-height: 34px; }
+  .route-fix, .route-supply { min-height: 30px; }
+  .route-list li { gap: 6px; }
+  .route-fix { margin-left: auto; }
+  .route-step { flex: 0 0 20px; width: 20px; height: 20px; font-size: 10px; }
+}
+
+@media (max-width: 640px) {
+  .forge-main { padding-bottom: calc(26px + env(safe-area-inset-bottom)); }
+  .forge-head h1 { font-size: 22px; margin: 2px 0 6px; }
+  .forge-head .eyebrow { margin-bottom: 4px; }
+  .forge-lead { display: none; }
+  .forge-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .forge-actions .btn {
+    min-height: 38px; padding: 8px 4px; font-size: 11.5px; white-space: nowrap;
+  }
+  .forge-actions .btn-primary { grid-column: auto; }
+  .stage-bar {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px; padding: 8px 10px;
+  }
+  .stage-status { grid-column: 1 / -1; font-size: 10.5px; }
+  .stage-hint { display: block; grid-column: 1 / -1; font-size: 10px; line-height: 1.5; }
+  .zoom-tools { grid-column: 1 / -1; gap: 6px; }
+  .zoom-tools button { height: 40px; font-size: 14px; }
+  .palette-list { max-height: 180px; }
+  .palette-search input { font-size: 16px; }
+  .palette-chips { flex-wrap: nowrap; overflow-x: auto; max-height: none; padding-bottom: 4px; }
+  .palette-chips .chip { flex: none; min-height: 30px; }
+  .palette-item { min-height: 44px; }
+  .fg-del { width: 30px; height: 30px; }
+  .deps-tools { gap: 8px; }
+  .deps-tools .switch { min-height: 34px; }
+  .dep-actions button { min-height: 32px; }
+  .route-fix-form input { font-size: 16px; }
+  .board-scroll { max-height: 46vh; }
+}
+
 

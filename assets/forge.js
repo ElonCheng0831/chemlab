@@ -29,6 +29,12 @@
   var autoEl = document.getElementById("forge-auto");
   var reflowEl = document.getElementById("forge-reflow");
   var emptyEl = document.getElementById("forge-empty");
+  var zoomOutEl = document.getElementById("forge-zoom-out");
+  var zoomInEl = document.getElementById("forge-zoom-in");
+  var zoomValEl = document.getElementById("forge-zoom-val");
+  var zoomFitEl = document.getElementById("forge-zoom-fit");
+  var paletteEl = document.querySelector(".forge-palette");
+  var paletteToggleEl = document.getElementById("forge-palette-toggle");
 
   var NODE_W = 212;
   var NODE_H = 92;
@@ -39,11 +45,20 @@
   var MAX_DEPTH = 5;
   var MAX_NODES = 64;
   var STORE_KEY = "chemlab-forge-v1";
+  var ZOOM_KEY = "chemlab-forge-zoom";
+  var PALETTE_KEY = "chemlab-forge-palette";
+  var ZOOM_MIN = 0.25;
+  var ZOOM_MAX = 1.6;
   var SVG_NS = "http://www.w3.org/2000/svg";
+  var zoom = 1;
+  var pinch = null;
+  var touchPts = {};
+  var suppressClickTimer = null;
 
   var state = {
     q: "", cat: "all", auto: true, nodes: [], edges: [], seq: 1, example: 0,
-    supplies: {}, editing: null, root: null, overrides: {}, missing: {}
+    supplies: {}, editing: null, root: null, overrides: {}, missing: {},
+    boardW: BOARD_W, boardH: BOARD_H
   };
   var drag = null;
   var linking = null;
@@ -122,7 +137,7 @@
     });
   }
 
-  /* ---- 预建索引：避免每次扩展都遍历全部 279 条数据 ---- */
+  /* ---- 预建索引：避免每次扩展都遍历全部 280 条数据 ---- */
   var FORMULA_INDEX = {};
   var CORE_INDEX = {};
   DATA.forEach(function (d) {
@@ -512,8 +527,8 @@
     state.nodes.some(function (n) { if (n.depth === 0) { root = n; return true; } return false; });
     if (!root) return;
     try {
-      scroller.scrollLeft = Math.max(0, root.x - 60);
-      scroller.scrollTop = Math.max(0, root.y - 100);
+      scroller.scrollLeft = Math.max(0, root.x * zoom + (NODE_W * zoom) / 2 - scroller.clientWidth / 2);
+      scroller.scrollTop = Math.max(0, root.y * zoom + (NODE_H * zoom) / 2 - scroller.clientHeight / 2);
     } catch (e) {}
   }
 
@@ -659,6 +674,8 @@
     var needH = Math.max(BOARD_H, maxRows * (NODE_H + ROW_GAP) + 130);
     board.style.width = needW + "px";
     board.style.height = needH + "px";
+    state.boardW = needW;
+    state.boardH = needH;
     svg.setAttribute("width", needW);
     svg.setAttribute("height", needH);
     var startX = Math.max(46, Math.round((needW - totalW) / 2));
@@ -740,10 +757,125 @@
     board.classList.toggle("has-nodes", state.nodes.length > 0);
   }
 
+  /* ---------------- 缩放（按钮 / 双指 / Ctrl+滚轮） ---------------- */
+  function zoomLabel() {
+    if (zoomValEl) zoomValEl.textContent = Math.round(zoom * 100) + "%";
+  }
+  function scrollerEl() { return board.parentNode; }
+  function setZoom(next, anchorX, anchorY) {
+    next = clamp(Math.round(next * 100) / 100, ZOOM_MIN, ZOOM_MAX);
+    if (Math.abs(next - zoom) < 0.005) return;
+    var scroller = scrollerEl();
+    if (!scroller) return;
+    var sr = scroller.getBoundingClientRect();
+    var ax = anchorX == null ? sr.left + scroller.clientWidth / 2 : anchorX;
+    var ay = anchorY == null ? sr.top + scroller.clientHeight / 2 : anchorY;
+    var rect = board.getBoundingClientRect();
+    var cx = (ax - rect.left) / zoom;
+    var cy = (ay - rect.top) / zoom;
+    zoom = next;
+    board.style.zoom = zoom;
+    zoomLabel();
+    var nr = board.getBoundingClientRect();
+    scroller.scrollLeft += (nr.left + cx * zoom) - ax;
+    scroller.scrollTop += (nr.top + cy * zoom) - ay;
+    try { localStorage.setItem(ZOOM_KEY, String(zoom)); } catch (e) {}
+  }
+  function resetZoom() { setZoom(1); }
+  function fitZoom() {
+    var scroller = scrollerEl();
+    if (!scroller) return;
+    var w = state.boardW || BOARD_W;
+    setZoom((scroller.clientWidth - 18) / w);
+    setTimeout(scrollToRoot, 80);
+    setStatus("画布已缩放到适合宽度");
+  }
+  function suppressNextClick() {
+    suppressClick = true;
+    if (suppressClickTimer) clearTimeout(suppressClickTimer);
+    suppressClickTimer = setTimeout(function () { suppressClick = false; }, 450);
+  }
+
+  function setPaletteOpen(open, remember) {
+    if (!paletteEl) return;
+    paletteEl.classList.toggle("is-collapsed", !open);
+    if (paletteToggleEl) {
+      paletteToggleEl.setAttribute("aria-expanded", open ? "true" : "false");
+      paletteToggleEl.textContent = open ? "收起" : "展开药品库";
+    }
+    if (remember !== false) {
+      try { localStorage.setItem(PALETTE_KEY, open ? "1" : "0"); } catch (e) {}
+    }
+  }
+
+  /* 双指缩放：在 document 捕获阶段记录触点，第二条手指落下时取消拖动/平移 */
+  function touchDistance(a, b) {
+    var dx = a.x - b.x;
+    var dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy) || 1;
+  }
+  function touchInsideBoard(p) {
+    var r = board.getBoundingClientRect();
+    return p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom;
+  }
+  function onTouchStart(e) {
+    if (e.pointerType !== "touch") return;
+    if (!touchInsideBoard({ x: e.clientX, y: e.clientY })) return;
+    touchPts[e.pointerId] = { x: e.clientX, y: e.clientY };
+    var ids = Object.keys(touchPts);
+    if (ids.length === 2) {
+      if (drag) { try { drag.el.classList.remove("is-moving"); } catch (x) {} drag = null; }
+      pan = null;
+      board.classList.remove("is-panning");
+      var a = touchPts[ids[0]];
+      var b = touchPts[ids[1]];
+      pinch = {
+        dist: touchDistance(a, b),
+        zoom: zoom,
+        cx: (a.x + b.x) / 2,
+        cy: (a.y + b.y) / 2
+      };
+      suppressNextClick();
+    }
+  }
+  function onTouchMove(e) {
+    if (e.pointerType !== "touch" || !touchPts[e.pointerId]) return;
+    touchPts[e.pointerId] = { x: e.clientX, y: e.clientY };
+    if (!pinch) return;
+    var ids = Object.keys(touchPts);
+    if (ids.length !== 2) return;
+    if (e.cancelable) e.preventDefault();
+    var a = touchPts[ids[0]];
+    var b = touchPts[ids[1]];
+    var next = pinch.zoom * (touchDistance(a, b) / pinch.dist);
+    setZoom(next, (a.x + b.x) / 2, (a.y + b.y) / 2);
+    pinch.cx = (a.x + b.x) / 2;
+    pinch.cy = (a.y + b.y) / 2;
+  }
+  function onTouchEnd(e) {
+    if (e.pointerType !== "touch") return;
+    delete touchPts[e.pointerId];
+    if (Object.keys(touchPts).length < 2 && pinch) {
+      pinch = null;
+      suppressNextClick();
+    }
+  }
+  document.addEventListener("pointerdown", onTouchStart, true);
+  document.addEventListener("pointermove", onTouchMove, { capture: true, passive: false });
+  document.addEventListener("pointerup", onTouchEnd, true);
+  document.addEventListener("pointercancel", onTouchEnd, true);
+
+  board.addEventListener("wheel", function (e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    setZoom(zoom * (e.deltaY < 0 ? 1.12 : 0.89), e.clientX, e.clientY);
+  }, { passive: false });
+
   /* ---------------- 拖动 / 连线（手动模式） ---------------- */
   var pan = null;
   board.addEventListener("pointerdown", function (e) {
     if (e.button !== 0) return;
+    if (pinch) return;
     if (e.target.closest(".fg-node") || e.target.closest("button") || e.target.closest("input") || e.target.closest(".fg-port")) return;
     var scroller = board.parentNode;
     if (!scroller) return;
@@ -759,8 +891,8 @@
     var nx = Math.round(p.x - drag.dx);
     var ny = Math.round(p.y - drag.dy);
     if (!drag.moved && (Math.abs(nx - node.x) > 3 || Math.abs(ny - node.y) > 3)) drag.moved = true;
-    var bw = board.offsetWidth || BOARD_W;
-    var bh = board.offsetHeight || BOARD_H;
+    var bw = state.boardW || BOARD_W;
+    var bh = state.boardH || BOARD_H;
     node.x = clamp(nx, 0, bw - NODE_W);
     node.y = clamp(ny, 0, bh - NODE_H);
     drag.el.style.left = node.x + "px";
@@ -810,7 +942,7 @@
 
   function point(e) {
     var rect = board.getBoundingClientRect();
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    return { x: (e.clientX - rect.left) / zoom, y: (e.clientY - rect.top) / zoom };
   }
   function curve(x1, y1, x2, y2) {
     var dx = Math.max(46, Math.abs(x2 - x1) * 0.42);
@@ -1400,13 +1532,36 @@
   autoEl.addEventListener("change", function () {
     state.auto = !!autoEl.checked;
     document.body.classList.toggle("mode-auto", state.auto);
-    if (modeHintEl) modeHintEl.textContent = state.auto ? "自动展开 · 空白处拖动平移 · 拖动卡片移动 · × 删除" : "手动编排 · 空白处拖动平移 · 拖动卡片 · 从右侧圆点拉线";
+    if (modeHintEl) modeHintEl.textContent = isSmall
+      ? "双指缩放 · 单指平移 · 点卡片看制法"
+      : (state.auto ? "自动展开 · 空白处拖动平移 · 拖动卡片移动 · × 删除" : "手动编排 · 空白处拖动平移 · 拖动卡片 · 从右侧圆点拉线");
     if (state.auto && state.root) rebuild();
     else { renderAll(); scheduleSave(); }
     setStatus(state.auto ? "已开启自动展开" : "已切换到手动编排");
   });
 
+  if (zoomOutEl) zoomOutEl.addEventListener("click", function () { setZoom(zoom - 0.12); });
+  if (zoomInEl) zoomInEl.addEventListener("click", function () { setZoom(zoom + 0.12); });
+  if (zoomValEl) zoomValEl.addEventListener("click", resetZoom);
+  if (zoomFitEl) zoomFitEl.addEventListener("click", fitZoom);
+  if (paletteToggleEl) paletteToggleEl.addEventListener("click", function () {
+    setPaletteOpen(paletteEl.classList.contains("is-collapsed"));
+  });
+
   /* ---------------- 启动 ---------------- */
+  var savedRaw = null;
+  try { savedRaw = localStorage.getItem(ZOOM_KEY); } catch (e) {}
+  var isSmall = window.matchMedia("(max-width: 640px)").matches;
+  if (isSmall && modeHintEl) modeHintEl.textContent = "双指缩放 · 单指平移 · 点卡片看制法";
+  var savedZoom = savedRaw ? parseFloat(savedRaw) : (isSmall ? 0.7 : 1);
+  zoom = clamp(isNaN(savedZoom) ? 1 : savedZoom, ZOOM_MIN, ZOOM_MAX);
+  board.style.zoom = zoom;
+  zoomLabel();
+  var palettePref = null;
+  try { palettePref = localStorage.getItem(PALETTE_KEY); } catch (e) {}
+  if (palettePref === "0") setPaletteOpen(false, false);
+  else if (palettePref === "1") setPaletteOpen(true, false);
+  else setPaletteOpen(!window.matchMedia("(max-width: 640px)").matches, false);
   if (autoEl) autoEl.checked = state.auto;
   document.body.classList.toggle("mode-auto", state.auto);
   renderPalette();
@@ -1417,6 +1572,11 @@
     renderAll();
     setStatus("节点 0 · 连线 0 · 尚未成链");
   }
+  if (autoEl) autoEl.checked = state.auto;
+  document.body.classList.toggle("mode-auto", state.auto);
+  if (modeHintEl) modeHintEl.textContent = isSmall
+    ? "双指缩放 · 单指平移 · 点卡片看制法"
+    : (state.auto ? "自动展开 · 空白处拖动平移 · 拖动卡片移动 · × 删除" : "手动编排 · 空白处拖动平移 · 拖动卡片 · 从右侧圆点拉线");
 
   window.ChemForge = {
     state: state,

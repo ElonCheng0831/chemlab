@@ -437,7 +437,7 @@
 
   /* ---------------- 盐类离子检索表 ---------------- */
   var CATION_ORDER = ["H⁺", "Li⁺", "Na⁺", "K⁺", "NH₄⁺", "Mg²⁺", "Ca²⁺", "Sr²⁺", "Ba²⁺", "Al³⁺", "Cr³⁺", "Mn²⁺", "Fe²⁺", "Fe³⁺", "Co²⁺", "Ni²⁺", "Cu⁺", "Cu²⁺", "Zn²⁺", "Ag⁺", "Pb²⁺", "Sn²⁺"];
-  var ANION_ORDER = ["Cl⁻", "Br⁻", "I⁻", "NO₃⁻", "SO₄²⁻", "HSO₄⁻", "CO₃²⁻", "HCO₃⁻", "PO₄³⁻", "HPO₄²⁻", "H₂PO₄⁻", "SiO₃²⁻", "S₂O₃²⁻", "SO₃²⁻", "MnO₄⁻", "ClO₃⁻", "IO₃⁻", "Cr₂O₇²⁻", "S²⁻", "C₂O₄²⁻"];
+  var ANION_ORDER = ["Cl⁻", "Br⁻", "I⁻", "NO₃⁻", "NO₂⁻", "SO₄²⁻", "HSO₄⁻", "HSO₃⁻", "CO₃²⁻", "HCO₃⁻", "PO₄³⁻", "HPO₄²⁻", "H₂PO₄⁻", "P₂O₇⁴⁻", "SiO₃²⁻", "S₂O₃²⁻", "SO₃²⁻", "MnO₄⁻", "ClO₃⁻", "ClO₄⁻", "BrO₃⁻", "IO₃⁻", "Cr₂O₇²⁻", "S²⁻", "C₂O₄²⁻"];
 
   function saltData() {
     return DATA.filter(function (d) { return d.category === "盐" && d.ions && d.ions.length === 2; });
