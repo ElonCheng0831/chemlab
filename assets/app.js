@@ -830,7 +830,7 @@
       '<button class="donate-close" type="button" aria-label="关闭打赏窗口">×</button>' +
       '<p class="donate-kicker">TIP JAR · 微信支付</p>' +
       '<h2 id="donate-title">给站主的大肥鱼点米饭</h2>' +
-      '<p class="donate-desc">扫码随意打赏，请站主吃碗米饭。完全自愿，不解锁内容，也不影响站点的任何访问。</p>' +
+      '<p class="donate-desc">扫码随意打赏，请站主的大肥鱼吃碗米饭。完全自愿，不解锁内容，也不影响站点的任何访问。</p>' +
       '<img class="donate-qr" src="assets/donate-wechat.jpg" alt="微信支付收款二维码，收款方 Sasuke(*晨)" width="640" height="869" loading="lazy">' +
       '<p class="donate-note">收款方：Sasuke(*晨) · 微信支付</p>' +
       '</div>';
