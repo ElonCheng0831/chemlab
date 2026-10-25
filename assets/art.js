@@ -339,7 +339,9 @@
     "定量测量": "titrate",
     "气体与燃烧": "gas-jar",
     "沉淀溶解平衡": "precipitate",
-    "配位化学": "color-tubes"
+    "配位化学": "color-tubes",
+    "生活化学": "color-tubes",
+    "环境检测": "titrate"
   };
 
   function artId(item, type) {

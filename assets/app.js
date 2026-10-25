@@ -401,6 +401,22 @@
      优先读取条目自带的 reagentRoles（键名可用原料名的片段），
      没有时按名称关键词推断，最后回退为“反应原料”。
      ------------------------------------------------------------------ */
+  var ROLE_OVERRIDES = [
+    [/硫酸银/, "催化剂", "在 COD 消解中催化重铬酸钾氧化有机质"],
+    [/硫酸汞/, "掩蔽剂", "络合氯离子，防止其被氧化造成 COD 假高"],
+    [/试亚铁灵|邻二氮菲|DPD|纳氏试剂/, "指示剂/显色剂", "与滴定终点或目标物作用产生特征颜色"],
+    [/硫酸亚铁铵/, "还原剂/滴定剂", "作为标准还原剂回滴剩余的氧化剂"],
+    [/重铬酸钾|高锰酸钾/, "氧化剂", "强氧化性，消解或氧化还原性物质，自身被还原"],
+    [/氯化钡/, "沉淀剂", "与硫酸根生成难溶硫酸钡"],
+    [/碘化钾/, "还原剂/显色剂", "被氧化生成碘，或与碘形成可溶性配离子"],
+    [/草酸/, "还原剂/沉淀剂", "可还原高锰酸钾，也可沉淀钙、铜等离子"],
+    [/活性炭/, "吸附剂", "吸附有机物、色素与余氯，不参与主体反应"],
+    [/明矾|聚合氯化铝/, "絮凝剂", "中和胶体电荷、架桥使悬浮颗粒沉降"],
+    [/硼砂/, "交联剂", "与聚乙烯醇的羟基形成交联网络"],
+    [/甲醛/, "交联剂", "使蛋白质或脲醛预聚体交联固化"],
+    [/镍钛合金/, "形状记忆材料", "温度诱导马氏体相变，恢复预设形状"]
+  ];
+
   var ROLE_RULES = [
     [/催化剂|催化|酶|五氧化二钒/, "催化剂", "降低反应活化能、加快反应速率，本身的质量和化学性质在反应前后基本不变"],
     [/浓硫酸|五氧化二磷|无水氯化钙|无水硫酸铜/, "脱水剂/干燥剂", "吸收体系中的水或夺取有机物中的水，促使反应向生成物方向进行"],
@@ -424,6 +440,11 @@
         if (Object.prototype.hasOwnProperty.call(item.reagentRoles, key) && text.indexOf(key) !== -1) {
           return { tag: item.reagentRoles[key], why: "在本条制法中：" + item.reagentRoles[key] };
         }
+      }
+    }
+    for (var j = 0; j < ROLE_OVERRIDES.length; j++) {
+      if (ROLE_OVERRIDES[j][0].test(text)) {
+        return { tag: ROLE_OVERRIDES[j][1], why: ROLE_OVERRIDES[j][2] };
       }
     }
     for (var i = 0; i < ROLE_RULES.length; i++) {
@@ -785,6 +806,43 @@
     document.body.appendChild(box);
   }
 
+  function initDonate() {
+    if (document.querySelector(".donate-bar")) return;
+    var footer = document.querySelector("footer.footer");
+    if (!footer) return;
+
+    var bar = document.createElement("div");
+    bar.className = "donate-bar";
+    bar.innerHTML =
+      '<div class="wrap donate-inner">' +
+      '<span class="donate-copy"><b>如果这个站点帮到了你</b><small>可以请站主的大肥鱼吃碗米饭，完全自愿。</small></span>' +
+      '<button class="donate-btn" type="button">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.3A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 7 2.7C19 15.6 12 20 12 20Z"/></svg>' +
+      '给站主的大肥鱼点米饭</button>' +
+      '</div>';
+    footer.appendChild(bar);
+
+    var dlg = document.createElement("dialog");
+    dlg.className = "donate-dialog";
+    dlg.setAttribute("aria-labelledby", "donate-title");
+    dlg.innerHTML =
+      '<div class="donate-card">' +
+      '<button class="donate-close" type="button" aria-label="关闭打赏窗口">×</button>' +
+      '<p class="donate-kicker">TIP JAR · 微信支付</p>' +
+      '<h2 id="donate-title">给站主的大肥鱼点米饭</h2>' +
+      '<p class="donate-desc">扫码随意打赏，请站主吃碗米饭。完全自愿，不解锁内容，也不影响站点的任何访问。</p>' +
+      '<img class="donate-qr" src="assets/donate-wechat.jpg" alt="微信支付收款二维码，收款方 Sasuke(*晨)" width="640" height="869" loading="lazy">' +
+      '<p class="donate-note">收款方：Sasuke(*晨) · 微信支付</p>' +
+      '</div>';
+    document.body.appendChild(dlg);
+
+    var btn = bar.querySelector(".donate-btn");
+    if (btn) btn.addEventListener("click", function () { dlg.showModal(); });
+    var close = dlg.querySelector(".donate-close");
+    if (close) close.addEventListener("click", function () { dlg.close(); });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+  }
+
   function init() {
     initTheme();
     initNav();
@@ -815,6 +873,7 @@
     initCounts();
     initAddonNotice();
     initArtStrip();
+    initDonate();
     observeReveals();
     initDeepLink();
 

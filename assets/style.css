@@ -1180,21 +1180,32 @@ table.data td:first-child { font-weight: 600; white-space: nowrap; }
 @media (max-width: 640px) {
   .card-figure { height: 70px; }
   .card-figure .art-svg { width: 132px; height: 70px; }
-  .art-strip { grid-template-columns: repeat(2, 1fr); }
+  .art-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .art-strip figure { flex: 0 0 132px; padding: 8px; scroll-snap-align: start; }
+  .art-strip .art-svg { height: 68px; }
+  .art-strip figcaption { font-size: 11.5px; }
 }
 
 /* ---------------- 页面统计条 ---------------- */
 .page-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 10px;
   margin-top: 22px;
-  max-width: 720px;
+  max-width: 980px;
 }
 .page-metrics > div {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   padding: 10px 14px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -1202,9 +1213,10 @@ table.data td:first-child { font-weight: 600; white-space: nowrap; }
 }
 .page-metrics b {
   font-family: var(--mono);
-  font-size: 20px;
+  font-size: 18px;
   color: var(--accent-deep);
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 .page-metrics span { font-size: 12.5px; color: var(--muted); }
 [data-theme="dark"] .page-metrics b { color: var(--accent); }
@@ -1271,7 +1283,48 @@ table.data td:first-child { font-weight: 600; white-space: nowrap; }
   .hero-actions .btn { width: 100%; }
 }
 
-@media (max-width: 480px) {
-  .page-metrics { grid-template-columns: 1fr; }
-  .page-metrics > div { justify-content: space-between; }
+/* ---------------- 打赏 ---------------- */
+.donate-bar { border-top: 1px solid var(--line); margin-top: 28px; }
+.donate-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 0; flex-wrap: wrap; }
+.donate-copy b { display: block; font-size: 14px; letter-spacing: .01em; }
+.donate-copy small { display: block; margin-top: 3px; color: var(--muted); font-size: 12.5px; }
+.donate-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 38px; padding: 0 16px;
+  border: 1px solid var(--accent); border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-deep);
+  font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  transition: transform .18s ease, background .18s ease;
+}
+.donate-btn svg { width: 17px; height: 17px; }
+.donate-btn:hover { transform: translateY(-1px); background: var(--surface); }
+.donate-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.donate-dialog { border: 0; padding: 0; background: transparent; max-width: min(92vw, 420px); }
+.donate-dialog::backdrop { background: rgba(4, 12, 10, .64); backdrop-filter: blur(3px); }
+.donate-card {
+  position: relative;
+  margin: 0; padding: 26px 24px 22px;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 22px;
+  box-shadow: var(--shadow-lift); text-align: center;
+}
+.donate-close {
+  position: absolute; top: 8px; right: 10px;
+  width: 32px; height: 32px; border: 0; border-radius: 50%;
+  background: var(--surface-2); color: var(--muted);
+  font-size: 20px; line-height: 1; cursor: pointer;
+}
+.donate-close:hover { color: var(--ink); background: var(--line); }
+.donate-kicker { margin: 0; color: var(--accent-deep); font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; }
+.donate-card h2 { margin: 8px 0 8px; font-size: 21px; letter-spacing: -.01em; }
+.donate-desc { margin: 0 auto 16px; max-width: 30em; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.donate-qr { display: block; width: min(100%, 300px); height: auto; margin: 0 auto; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.donate-note { margin: 12px 0 0; color: var(--muted); font-size: 11.5px; }
+
+@media (max-width: 640px) {
+  .donate-inner { flex-direction: column; align-items: stretch; text-align: center; }
+  .donate-btn { justify-content: center; width: 100%; min-height: 42px; }
+  .donate-card { padding: 24px 16px 18px; }
+  .donate-card h2 { font-size: 19px; }
+  .donate-qr { width: min(100%, 260px); }
 }
